@@ -1,0 +1,13 @@
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\V_extractFile.Form1.resources
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\V_extractFile.csproj.GenerateResource.Cache
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\bin\Debug\Ionic.Zip.dll
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\V_extractFile.danet.resources
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\bin\Debug\Interop.IWshRuntimeLibrary.dll
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\Interop.IWshRuntimeLibrary.dll
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\V_extractFile.csproj.ResolveComReference.cache
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\V_extractFile.csprojResolveAssemblyReference.cache
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\bin\Debug\setup.exe
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\bin\Debug\setup.pdb
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\setup.exe
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\setup.pdb
+F:\Visual Studio\Projects\V_extractFile\V_extractFile\obj\Debug\setup.Properties.Resources.resources

